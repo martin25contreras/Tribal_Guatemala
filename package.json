@@ -1,0 +1,25 @@
+{
+  "name": "tribal_guatemala",
+  "version": "1.0.0",
+  "description": "Prueba de seleccion de Martin Contreras, usando Node y Api's externas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    //"dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martin25contreras/Tribal_Guatemala.git"
+  },
+  "author": "Martin Contreras",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martin25contreras/Tribal_Guatemala/issues"
+  },
+  "homepage": "https://github.com/martin25contreras/Tribal_Guatemala#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "request": "^2.88.2"
+  }
+}
