@@ -109,7 +109,7 @@
             } 
         },
         "/users": {
-            "post": {
+            "get": {
               "tags": [
                 "users"
               ],
@@ -137,5 +137,121 @@
               }
             } 
         },
+        "/listen": {
+            "get": {
+              "tags": [
+                "listen"
+              ],
+              "description": "listar series",
+              "parameters": [
+                {
+                  "name": "create",
+                  "in": "body",
+                  "description": "Permite obtener informacion de las series para la API externa",
+                  "schema": {
+                    "$ref": "#/definitions/listen"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/listen"
+                  }
+                }
+              }
+            } 
+        },
+        "/api/series/:idSerie": {
+            "get": {
+              "tags": [
+                "listen"
+              ],
+              "description": "listar series por ID",
+              "parameters": [
+                {
+                  "name": "/api/series/:idSerie",
+                  "in": "body",
+                  "description": "Permite obtener informacion de las series para la API externa dependiendo de su ID",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/:idSerie"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/:idSerie"
+                  }
+                }
+              }
+            } 
+        },
+        "/api/series/commet": {
+            "get": {
+              "tags": [
+                "commet"
+              ],
+              "description": "Crear nuevos comentarios",
+              "parameters": [
+                {
+                  "name": "/api/series/commet",
+                  "in": "body",
+                  "description": "Permite crear un comentario para las series",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/commet"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/commet"
+                  }
+                }
+              }
+            } 
+        },
+        "/api/series/commet/listen/:idSerie": {
+            "get": {
+              "tags": [
+                "commet/listen"
+              ],
+              "description": "listar los comentarios de las series por ID",
+              "parameters": [
+                {
+                  "name": "/api/series/commet/listen/:idSerie",
+                  "in": "body",
+                  "description": "Permite obtener informacion de los comentarios para las series para la API externa dependiendo de su ID",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/commet/listen/:idSerie"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/api/series/commet/listen/:idSerie"
+                  }
+                }
+              }
+            } 
+        }
     }
 }
