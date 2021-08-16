@@ -125,7 +125,7 @@ export const getComentarios = async (req: Request, res: Response) : Promise <voi
             }
         });
         
-        res.json({data: comment});
+        res.json({comment: comment, data: data});
     }else{
         res.send('No se ha logeado')
     }
@@ -175,6 +175,10 @@ export const Login = async (req: Request, res: Response) : Promise <void> =>{
 };
 
 export const getUsers = async (req: Request, res: Response) : Promise <void> =>{
-    const price = await User.find();
-    res.send(price);
+    if(token){
+        const price = await User.find();
+        res.send(price);
+    }else{
+        res.send('No se ha logeado')
+    }
 }

@@ -1,0 +1,26 @@
+==== JSON DE PRUEBAS ====
+
+*** REGISTRO ***
+{
+    "nombre": "", 
+    "user_name": "",
+    "password": ""
+}
+
+Cuando ya hay un usuario con el "user_name" repetido da un mensaje de error
+usuarios ya creado = tcalderon, mcontreras
+
+*** LOGIN ***
+{
+    "userName": "",
+    "password": ""
+}
+
+Cuando ya hay un usuario con el "user_name" repetido da un mensaje de error
+usuarios ya creado = tcalderon, 456789
+
+*** COMENTARIOS ***
+{
+    "id_serie": 3, 
+    "comentario": "buena trama"
+}
