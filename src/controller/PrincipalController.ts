@@ -1,19 +1,26 @@
 import {Request, Response} from 'express';
 import User from "../models/user";
+import Comment from "../models/coment";
 import request from "request";
 
 // REGISTRO DE PRODUCTOS
 export const createProduct = async (req: Request, res: Response) : Promise <void> =>{
     const {nombre, user_name, password} = req.body;
 
+    if( user_name == '' && password == '')
+        res.send({message: "datos vacios"});
+    else if( user_name == '')
+        res.send({message: "Nombre de usuario Vacio"});
+    else if( password == '')
+        res.send({message: "Password vacio"});
+
     const UserAux = await User.find({"userName": user_name});
-    console.log(UserAux)
     if (UserAux.length > 0) {
-        res.send({message: "Usuario ya registrado"});
+        res.send({message: "Usuario ya registrado", data: UserAux});
     } else {
         const user = await User.create({
             nombre, 
-            user_name, 
+            userName: user_name, 
             password,
         });
     
@@ -22,7 +29,7 @@ export const createProduct = async (req: Request, res: Response) : Promise <void
 };
 
 export const getSeries = async (req: Request, res: Response) : Promise <void> =>{
-    const resRequest = request('https://api.tvmaze.com/shows', (error, response, body) =>{
+    const resRequest = request('https://api.tvmaze.com/shows', (error: any, response: any, body: string) =>{
         
         if(error) console.log('Error:', error);
         else{
@@ -36,7 +43,7 @@ export const getSeries = async (req: Request, res: Response) : Promise <void> =>
 export const getSeriesById = async (req: Request, res: Response) : Promise <void> =>{
     const id = req.params.idSerie;
 
-    const resRequest = request('https://api.tvmaze.com/shows/'+id, (error, response, body) =>{
+    const resRequest = request('https://api.tvmaze.com/shows/'+id, (error: any, response: any, body: string) =>{
         
         if(error) console.log('Error:', error);
         else{
@@ -47,23 +54,23 @@ export const getSeriesById = async (req: Request, res: Response) : Promise <void
 };
 
 //VARIACION DE PRODUCTOS
-export const updateProduct = async (req: Request, res: Response) : Promise <void> =>{
-    
-    const {codigo, nombre, cantidad, precio, descripcion, categoria} = req.body;
-    
-    const updateProduct = await User.findOneAndUpdate({"codigo": codigo}, {
-        nombre, 
-        cantidad, 
-        precio, 
-        descripcion, 
-        categoria,
+export const CreateComment = async (req: Request, res: Response) : Promise <void> =>{
+    const {id_serie, comentario} = req.body;
+
+    const resRequest = request('https://api.tvmaze.com/shows/'+id_serie, async (error: any, response: any, body: string) =>{
+        
+        if(error) console.log('Error:', error);
+        else{
+            const users = JSON.parse(body);
+            const comment = await Comment.create({id_serie, comentario});
+
+            res.send({data: users, comentario: comment});
+        }
     });
 
-    if (updateProduct) {
-        res.send({data: "OK"});
-    } else {
-        res.status(404).send({});
-    }
+    const comment = await Comment.create({id_serie, comentario});
+
+    res.send(comment);
     
 };
 

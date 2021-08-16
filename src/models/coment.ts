@@ -10,7 +10,7 @@ interface Comment extends Document{
 const schema = new Schema({
     id: ObjectId,
     id_serie: {type: String, require: true,},
-    comentario: {type: String, require: true, unique: true},   
+    comentario: {type: String, require: true},   
 });
 
 const Comment = model<Comment>('comment', schema);
