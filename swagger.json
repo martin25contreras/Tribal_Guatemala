@@ -1,0 +1,141 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", //version of the OpenAPI Specification
+      "title": "My User Project CRUD",
+      "description": "My User Project Application API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/register": {
+          "post": {
+            "tags": [
+              "Register"
+            ],
+            "description": "Crear un nuevo usuario",
+            "parameters": [
+              {
+                "name": "user",
+                "in": "body",
+                "description": "Usar para crear nuevo usuario",
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "New user is created",
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          } 
+        },
+        "/login": {
+            "post": {
+              "tags": [
+                "Login"
+              ],
+              "description": "Logear usuarios",
+              "parameters": [
+                {
+                  "name": "login",
+                  "in": "body",
+                  "description": "Permite logear usuarios registrados",
+                  "schema": {
+                    "$ref": "#/definitions/login"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/login"
+                  }
+                }
+              }
+            } 
+        },
+        "/logout": {
+            "post": {
+              "tags": [
+                "logout"
+              ],
+              "description": "Logear usuarios",
+              "parameters": [
+                {
+                  "name": "logout",
+                  "in": "body",
+                  "description": "Permite sacar de sesion a usuarios registrados",
+                  "schema": {
+                    "$ref": "#/definitions/logout"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/logout"
+                  }
+                }
+              }
+            } 
+        },
+        "/users": {
+            "post": {
+              "tags": [
+                "users"
+              ],
+              "description": "Logear usuarios",
+              "parameters": [
+                {
+                  "name": "users",
+                  "in": "body",
+                  "description": "Permite obtener informacion de los usuarios registrados",
+                  "schema": {
+                    "$ref": "#/definitions/users"
+                  }
+                }
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "responses": {
+                "200": {
+                  "description": "New user is created",
+                  "schema": {
+                    "$ref": "#/definitions/users"
+                  }
+                }
+              }
+            } 
+        },
+    }
+}

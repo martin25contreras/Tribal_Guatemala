@@ -1,3 +1,5 @@
+"use strict";
+
 import express, { Application, Request, Response } from 'express';
 import { urlencoded, json } from 'body-parser';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -7,6 +9,9 @@ import dotenv from 'dotenv';
 import connectToDB from './database';
 import apiV1 from './route/route';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+
+const swaggerDocument = ["./swagger.json"];
 
 
 dotenv.config();
@@ -36,6 +41,12 @@ apiV1(app);
 app.use((req: Request, res: Response) => {
   res.status(404).send('NOT FOUND');
 });
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
 
 connectToDB().then((connected: boolean) => {
   if (connected) {

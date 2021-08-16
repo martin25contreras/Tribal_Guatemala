@@ -11,7 +11,10 @@ let token: string= '';
 export const Register = async (req: Request, res: Response) : Promise <void> =>{
     const {nombre, user_name, password} = req.body;
     
+    // VALIDACION PARA VER SI EL TOKEN NO ESTA ACTIVADO
     if(token == ''){
+
+        //EVALUAMOS LOS CAMPOS
         if( user_name == '' && password == '')
             res.send({message: "datos vacios"});
         else if( user_name == '')
@@ -22,7 +25,7 @@ export const Register = async (req: Request, res: Response) : Promise <void> =>{
         let usuario = new User({
             nombre,
             userName: user_name,
-            password: bcrypt.hashSync(password, 10),
+            password: bcrypt.hashSync(password, 10),//ENCRIPTACION DE CLAVE
         });
         usuario.save((err, usuarioDB) => {
             if (err) {
@@ -43,11 +46,14 @@ export const Register = async (req: Request, res: Response) : Promise <void> =>{
 
 export const getSeries = async (req: Request, res: Response) : Promise <void> =>{
 
+    //EVALUAMOS EL TOKEN, DEBE ESTAR ACTIVADO
     if(token){
+        //CONSULTAMOS LA API EXTERNA
         const resRequest = request('https://api.tvmaze.com/shows', (error: any, response: any, body: string) =>{
             
             if(error) console.log('Error:', error);
             else{
+                //MOSTRAMOS LOS DATOS DE LA API EXTERNA
                 const users = JSON.parse(body);
                 res.send(users);
             }
@@ -59,13 +65,19 @@ export const getSeries = async (req: Request, res: Response) : Promise <void> =>
 };
 
 export const getSeriesById = async (req: Request, res: Response) : Promise <void> =>{
+    
+    //RECIBIMOS COMO PARAMENTRO EL ID DE LA SERIE QUE DESEAMOS MOSTRAR
     const id = req.params.idSerie;
 
-    if(token){
+     //EVALUAMOS EL TOKEN, DEBE ESTAR ACTIVADO
+     if(token){
+        //CONSULTAMOS LA API EXTERNA
+
         const resRequest = request('https://api.tvmaze.com/shows/'+id, (error: any, response: any, body: string) =>{
             
             if(error) console.log('Error:', error);
             else{
+                //MOSTRAMOS LOS DATOS DE LA API EXTERNA
                 const users = JSON.parse(body);
                 res.send(users);
             }
@@ -77,8 +89,12 @@ export const getSeriesById = async (req: Request, res: Response) : Promise <void
 
 //VARIACION DE PRODUCTOS
 export const CreateComment = async (req: Request, res: Response) : Promise <void> =>{
+    
+    //RECIBIMOS LOS DATOS DEL JSON
     const {id_serie, comentario} = req.body;
+    //EVALUAMOS EL TOKEN, DEBE ESTAR ACTIVADO
     if(token){
+        //CONSULTAMOS LA API EXTERNA PARA DETERMINA SI EXISTE O NO
         const resRequest = request('https://api.tvmaze.com/shows/'+id_serie, async (error: any, response: any, body: string) =>{
             
             if(error) console.log('Error:', error);
@@ -104,14 +120,17 @@ export const getComentarios = async (req: Request, res: Response) : Promise <voi
 
     let data= {};
 
+    //EVALUAMOS EL TOKEN, DEBE ESTAR ACTIVADO
     if(token){
+        // BUSCAMOS TODOS LOS DOCUMENTOS QUE ESTEN ASOCIADOS A DICHA SERIE
         const comment = await Comment.find({id_serie: req.params.idSerie});
-
+        //CONSULTAMOS LA API EXTERNA
         const resRequest = request('https://api.tvmaze.com/shows/'+comment[0]['id_serie'], (error: any, response: any, body: string) =>{
             
             if(error) console.log('Error:', error);
             else{
                 const users = JSON.parse(body);
+                //MOSTRAMOS POR CONSOLA LOS DATOS DE LA SERIE CON EL COMENTARIO
                 data = {
                     comentario: comment[0]['id_serie'],
                     serie_id: users.id,
@@ -124,7 +143,7 @@ export const getComentarios = async (req: Request, res: Response) : Promise <voi
                 console.log(data)
             }
         });
-        
+        //DEVOLVEMOS TODOS LOS COMENTARIOS DE LA SERIE
         res.json({comment: comment, data: data});
     }else{
         res.send('No se ha logeado')
@@ -136,41 +155,41 @@ export const Login = async (req: Request, res: Response) : Promise <void> =>{
 
     User.findOne({ userName: body.userName }, (erro: any, UserDB: { password: string; })=>{
         if (erro) {
-          return res.status(500).json({
-             ok: false,
-             err: erro
-          })
-       }
-   // Verifica que exista un User con el mail escrita por el User.
-      if (!UserDB) {
-         return res.status(400).json({
-           ok: false,
-           err: {
-               message: "User o contraseña incorrectos"
-           }
-        })
-      }
-   // Valida que la contraseña escrita por el User, sea la almacenada en la db
-      if (! bcrypt.compareSync(body.password, UserDB.password)){
-         return res.status(400).json({
+            return res.status(500).json({
+                ok: false,
+                err: erro
+            })
+        }
+    // Verifica que exista un User con el userName escrita por el User.
+        if (!UserDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "User o contraseña incorrectos"
+                }
+            })
+        }
+    // Valida que la contraseña escrita por el User, sea la almacenada en la db
+        if (! bcrypt.compareSync(body.password, UserDB.password)){
+            return res.status(400).json({
             ok: false,
             err: {
-              message: "User o contraseña incorrectos"
+                message: "User o contraseña incorrectos"
             }
-         });
-      }
-   // Genera el token de autenticación
+            });
+        }
+    // Genera el token de autenticación
         token = jwt.sign({
-              User: UserDB,
-           }, process.env.SEED_AUTENTICACION, {
-           expiresIn: process.env.CADUCIDAD_TOKEN
-       })
-       res.json({
-           ok: true,
-           User: UserDB,
-           token,
-       })
-   })
+                User: UserDB,
+            }, process.env.SEED_AUTENTICACION, {
+            expiresIn: process.env.CADUCIDAD_TOKEN
+        })
+        res.json({
+            ok: true,
+            User: UserDB,
+            token,
+        })
+    })
     
 };
 
@@ -180,5 +199,14 @@ export const getUsers = async (req: Request, res: Response) : Promise <void> =>{
         res.send(price);
     }else{
         res.send('No se ha logeado')
+    }
+};
+
+export const Logout = async (req: Request, res: Response) : Promise <void> =>{
+    if(token){
+        token = token.replace(token, '');
+        res.send('Cerrando sesion');
+    }else{
+        res.send('No se puede efectuar el logout, no tienes una cuenta activa')
     }
 }
