@@ -102,31 +102,30 @@ export const CreateComment = async (req: Request, res: Response) : Promise <void
 
 export const getComentarios = async (req: Request, res: Response) : Promise <void> =>{
 
-    let data: any[]= [];
+    let data= {};
 
     if(token){
-        const comment = await Comment.find();
+        const comment = await Comment.find({id_serie: req.params.idSerie});
 
-        for (let index = 0; index < comment.length; index++) {
-            const resRequest = request('https://api.tvmaze.com/shows/'+comment[index]['id_serie'], (error: any, response: any, body: string) =>{
-                
-                if(error) console.log('Error:', error);
-                else{
-                    const users = JSON.parse(body);
-                    data[index] = {
-                        comentario: comment[index]['comentario'],
-                        serie_id: users.id,
-                        name_serie: users.name,
-                        type: users.type,
-                        genres: users.genres,
-                        url: users.url,
-                        summary: users.summary,
-                    }
-                    console.log(data[index])
+        const resRequest = request('https://api.tvmaze.com/shows/'+comment[0]['id_serie'], (error: any, response: any, body: string) =>{
+            
+            if(error) console.log('Error:', error);
+            else{
+                const users = JSON.parse(body);
+                data = {
+                    comentario: comment[0]['id_serie'],
+                    serie_id: users.id,
+                    name_serie: users.name,
+                    type: users.type,
+                    genres: users.genres,
+                    url: users.url,
+                    summary: users.summary,
                 }
-            });
-        }
-        res.json({data: data});
+                console.log(data)
+            }
+        });
+        
+        res.json({data: comment});
     }else{
         res.send('No se ha logeado')
     }

@@ -12,7 +12,7 @@ const createRoutesV1 = (app: Application): void => {
   app.get('/api/series/listen', PrincipalController.getSeries);
   app.get('/api/series/:idSerie', PrincipalController.getSeriesById);
   app.post('/api/series/commet', PrincipalController.CreateComment);
-  app.get('/api/series/commet/listen', PrincipalController.getComentarios);//ACTUALIZAR EL STOCK
+  app.get('/api/series/commet/listen/:idSerie', PrincipalController.getComentarios);//ACTUALIZAR EL STOCK
   
 };
 
